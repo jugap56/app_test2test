@@ -31,7 +31,7 @@ def generiere_pv_ertrag(
     if pv_kwp <= 0:
         # Falls keine PV-Anlage konfiguriert ist, direkt ein Null-Array zurückgeben
         ziel_index = pd.date_range(
-            start='2025-01-01 00:00:00', periods=35040, freq='15T', tz='Europe/Berlin'
+            start='2025-01-01 00:00:00', periods=35040, freq='15min'
         )
         return pd.DataFrame({'ertrag_kwh': 0.0}, index=ziel_index)
 

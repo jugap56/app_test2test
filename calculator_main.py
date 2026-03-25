@@ -158,6 +158,9 @@ def calculate_static(
     verbrauch = df_h['verbrauch_kwh'] + df_ea['verbrauch_kwh']
     pv_ertrag = df_pv['ertrag_kwh']
 
+    # Beide Indizes auf tz-naive umstellen, da Zeitformat nicht übereinstimmt und somti subtraktion nicht möglich ist
+    verbrauch.index = verbrauch.index.tz_localize(None)
+    pv_ertrag.index = pv_ertrag.index.tz_localize(None)
     print(verbrauch.index)
     print(pv_ertrag.index)
     netzbezug = (verbrauch - pv_ertrag).clip(lower=0.0)

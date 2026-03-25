@@ -42,7 +42,7 @@ def berechne_waermepumpe_verbrauch(
         # Falls die Tabelle breit ist (Tage als Zeilen, Uhrzeiten als Spalten)
         df_temp = df_temp.melt(id_vars=['Datum'], var_name='Uhrzeit', value_name='Temperatur')
         df_temp['Uhrzeit'] = df_temp['Uhrzeit'].astype(str).str[:5]
-        
+        print(df_temp)
         # Echtes Datetime-Parsing für korrekte chronologische Sortierung!
         df_temp['timestamp'] = pd.to_datetime(
             df_temp['Datum'] + ' ' + df_temp['Uhrzeit'], 

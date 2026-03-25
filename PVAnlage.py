@@ -79,7 +79,7 @@ def generiere_pv_ertrag(
     df['P_kW'] = df['P'] / 1000.0
 
     # Zeiten auf volle Stunden runden, um sauberes Resampling zu ermöglichen
-    df.index = df.index.round('H')
+    df.index = df.index.round('h')
 
     # 5. Resampling auf 15-Minuten-Raster und Interpolation (in UTC)
     df_15min = df[['P_kW']].resample('15min').interpolate(method='time')

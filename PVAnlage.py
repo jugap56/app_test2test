@@ -46,7 +46,7 @@ def generiere_pv_ertrag(
             #if df_cache.index.tz is None:
             #    df_cache.index = df_cache.index.tz_localize('Europe/Berlin', ambiguous='infer', nonexistent='shift_forward')
             if df_cache.index.tz is not None:
-                df_cache.index = pv_ertrag.index.tz_localize(None)
+                df_cache.index = df_cache.index.tz_localize(None)
             return df_cache[['ertrag_kwh']]
         except Exception as e:
             print(f"Cache konnte nicht gelesen werden, lade Daten neu: {e}")

@@ -158,7 +158,7 @@ def calculate_static(
     verbrauch = df_h['verbrauch_kwh'] + df_ea['verbrauch_kwh']
     pv_ertrag = df_pv['ertrag_kwh']
 
-    netzbezug = (verbrauch - pv_ertrag).clip(lower=0.0)
+    #netzbezug = (verbrauch - pv_ertrag).clip(lower=0.0)
     #pv_ins_netz = (pv_ertrag - verbrauch).clip(lower=0.0)
 
     if speicher_max > 0 and speicher_leistung > 0:

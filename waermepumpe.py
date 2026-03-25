@@ -94,6 +94,7 @@ def berechne_waermepumpe_verbrauch(
     }, index=ziel_index)
 
     if df_out.isnull().values.any():
+        print(df_out)
         raise ValueError("Berechnungsfehler: Der resultierende Wärmepumpen-DataFrame enthält NaN-Werte.")
 
     return df_out

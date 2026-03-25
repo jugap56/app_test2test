@@ -160,6 +160,8 @@ def calculate_static(
     verbrauch = df_h['verbrauch_kwh'] + df_ea['verbrauch_kwh']
     pv_ertrag = df_pv['ertrag_kwh']
 
+    print(type(verbrauch))
+    print(type(pv_ertrag))
     # Beide Indizes auf tz-naive umstellen, da Zeitformat nicht übereinstimmt und somti subtraktion nicht möglich ist
     verbrauch.index = verbrauch.index.tz_localize(None)
     pv_ertrag.index = pv_ertrag.index.tz_localize(None)

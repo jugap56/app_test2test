@@ -68,6 +68,7 @@ def berechne_waermepumpe_verbrauch(
     temperatur = df_temp['Temperatur'].astype(float)
 
     if verbose:
+        print(temperatur)
         print("Berechne dynamischen Energieverbrauch (vektorisiert)...")
 
     # 3. Vektorisierte Berechnung des Wärmepumpen-Verbrauchs

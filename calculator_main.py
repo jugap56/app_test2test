@@ -164,8 +164,8 @@ def calculate_static(
     verbrauch.index = verbrauch.index.tz_localize(None)
     pv_ertrag.index = pv_ertrag.index.tz_localize(None)
     # Frequenz-Tag wiederherstellen, da dieser durch .index.tz_localize(None) verloren geht
-    verbrauch.index = verbrauch.index.asfreq('15min')
-    pv_ertrag.index = pv_ertrag.index.asfreq('15min')
+    verbrauch = verbrauch.asfreq('15min')
+    pv_ertrag = pv_ertrag.asfreq('15min')
     print(verbrauch.index)
     print(pv_ertrag.index)
     netzbezug = (verbrauch - pv_ertrag).clip(lower=0.0)

@@ -66,7 +66,7 @@ def berechne_waermepumpe_verbrauch(
         raise ValueError("Unbekanntes CSV-Format. Erwarte Spalte 'Datum' oder exakt 35.040 'Temperatur'-Zeilen.")
 
     # 2. DataFrame auf das exakte 2025-Raster zwingen (35.040 Zeilen)
-    ziel_index = pd.date_range(start="2025-01-01 00:00:00", end="2025-12-31 23:45:00", freq="15T")
+    ziel_index = pd.date_range(start="2025-01-01 00:00:00", end="2025-12-31 23:45:00", freq="15min")
     
     # Reindex & Füllen von eventuellen Lücken (Vorwärts- und dann Rückwärtsfüllen für die Ränder)
     df_temp = df_temp[~df_temp.index.duplicated(keep='first')]

@@ -21,7 +21,7 @@ def berechne_waermepumpe_verbrauch(
 
     Returns:
         pd.DataFrame: DataFrame mit exakt 35.040 Zeilen.
-                      Index: DatetimeIndex (2025, 15T).
+                      Index: DatetimeIndex (2025, 15min).
                       Spalten: "temperatur_c" [°C], "verbrauch_kwh" [kWh].
     """
     if verbose:

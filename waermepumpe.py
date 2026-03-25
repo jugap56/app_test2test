@@ -69,6 +69,7 @@ def berechne_waermepumpe_verbrauch(
 
     if verbose:
         print(type(temperatur))
+        print(temperatur)
         print("Berechne dynamischen Energieverbrauch (vektorisiert)...")
 
     # 3. Vektorisierte Berechnung des Wärmepumpen-Verbrauchs

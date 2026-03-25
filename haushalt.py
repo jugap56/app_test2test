@@ -26,7 +26,7 @@ def generiere_haushaltslast(
         raise ValueError(f"Die Datei {csv_pfad} enthält NaN-Werte. Bitte bereinigen.")
 
     # DatetimeIndex für 2025 erstellen (exakt 35.040 Werte)
-    idx = pd.date_range(start="2025-01-01 00:00:00", end="2025-12-31 23:45:00", freq="15T")
+    idx = pd.date_range(start="2025-01-01 00:00:00", end="2025-12-31 23:45:00", freq="15min")
 
     # Mapping für die Monatsnamen der CSV
     monate_mapping = {

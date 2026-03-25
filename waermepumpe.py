@@ -4,7 +4,7 @@ import os
 
 def berechne_waermepumpe_verbrauch(
     temp_datei: str, 
-    t_base: float = 15.0, 
+    t_base: float = 19.0,           # Grundtemperatur
     jahresbedarf: float = 4000.0, 
     verbose: bool = True
 ) -> pd.DataFrame:

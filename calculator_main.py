@@ -13,7 +13,7 @@ def lade_strompreise_als_df(csv_dateiname: str) -> pd.DataFrame:
     Lädt die Spotmarktpreise, erzwingt einen 2025-DatetimeIndex und 
     gibt die Preise in Euro/kWh zurück.
     """
-    idx = pd.date_range("2025-01-01 00:00:00", "2025-12-31 23:45:00", freq="15T")
+    idx = pd.date_range("2025-01-01 00:00:00", "2025-12-31 23:45:00", freq="15min")
     
     if not os.path.exists(csv_dateiname):
         # Fallback auf Dummy-Preise (z.B. für Erstausführung ohne CSV)

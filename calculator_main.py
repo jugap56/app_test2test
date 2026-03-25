@@ -157,7 +157,6 @@ def calculate_static(
     df_ea = ea.generiere_lade_profil(ea_wochentag, ea_wochenende, ea_verbrauch, ea_leistung, ea_beginn)
     
     verbrauch = df_h['verbrauch_kwh'] + df_wp['verbrauch_kwh'] + df_ea['verbrauch_kwh']
-    verbrauch = df_h['verbrauch_kwh'] + df_ea['verbrauch_kwh']
     pv_ertrag = df_pv['ertrag_kwh']
 
     print(type(verbrauch))

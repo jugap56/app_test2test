@@ -62,8 +62,6 @@ def calculate_dynamic(
     spot = df_spot['preis_eur']
 
     # 2. Fachliche Verrechnung Schritt 1: Haushalt vs. PV
-    verbrauch.index = verbrauch.index.tz_localize(None)
-    pv_ertrag.index = pv_ertrag.index.tz_localize(None)
     print(h_verbrauch.index)
     print(pv_ertrag.index)
     netz_haushalt = (h_verbrauch - pv_ertrag).clip(lower=0.0)
@@ -165,6 +163,9 @@ def calculate_static(
     # Beide Indizes auf tz-naive umstellen, da Zeitformat nicht übereinstimmt und somti subtraktion nicht möglich ist
     verbrauch.index = verbrauch.index.tz_localize(None)
     pv_ertrag.index = pv_ertrag.index.tz_localize(None)
+    # Frequenz-Tag wiederherstellen, da dieser durch .index.tz_localize(None) verloren geht
+    verbrauch.index = verbrauch.index.asfreq('15min')
+    pv_ertrag.index = pv_ertrag.index.asfreq('15min')
     print(verbrauch.index)
     print(pv_ertrag.index)
     netzbezug = (verbrauch - pv_ertrag).clip(lower=0.0)

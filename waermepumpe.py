@@ -52,6 +52,7 @@ def berechne_waermepumpe_verbrauch(
         )
         df_temp = df_temp.dropna(subset=['timestamp'])
         df_temp = df_temp.sort_values('timestamp').set_index('timestamp')
+        print("check")
     elif 'Temperatur' in df_temp.columns and len(df_temp) == 35040:
         # Falls die Tabelle bereits eine 1D-Zeitreihe ist
         pass

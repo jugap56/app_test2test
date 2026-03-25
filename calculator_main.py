@@ -151,15 +151,15 @@ def calculate_static(
     """
     df_h = ha.generiere_haushaltslast(jahresverbrauch=ha_verbrauch)
     df_pv = pv.generiere_pv_ertrag(pv_kwp, pv_neigung, pv_ausrichtung)
-    #df_wp = wp.berechne_waermepumpe_verbrauch(temp_datei="2025_15min_temperaturverlauf.csv", jahresbedarf=wp_bedarf)
+    df_wp = wp.berechne_waermepumpe_verbrauch(temp_datei="2025_15min_temperaturverlauf.csv", jahresbedarf=wp_bedarf)
     df_ea = ea.generiere_lade_profil(ea_wochentag, ea_wochenende, ea_verbrauch, ea_leistung, ea_beginn)
     
-    #verbrauch = df_h['verbrauch_kwh'] + df_wp['verbrauch_kwh'] + df_ea['verbrauch_kwh']
+    verbrauch = df_h['verbrauch_kwh'] + df_wp['verbrauch_kwh'] + df_ea['verbrauch_kwh']
     verbrauch = df_h['verbrauch_kwh'] + df_ea['verbrauch_kwh']
     pv_ertrag = df_pv['ertrag_kwh']
 
-    #netzbezug = (verbrauch - pv_ertrag).clip(lower=0.0)
-    #pv_ins_netz = (pv_ertrag - verbrauch).clip(lower=0.0)
+    netzbezug = (verbrauch - pv_ertrag).clip(lower=0.0)
+    pv_ins_netz = (pv_ertrag - verbrauch).clip(lower=0.0)
 
     if speicher_max > 0 and speicher_leistung > 0:
         max_flow = speicher_leistung * 0.25

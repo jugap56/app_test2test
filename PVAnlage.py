@@ -25,13 +25,13 @@ def generiere_pv_ertrag(
         cache_dir (str): Verzeichnis zum Speichern/Laden gecachter CSV-Dateien.
 
     Returns:
-        pd.DataFrame: DataFrame mit DatetimeIndex (2025, 15T, Europe/Berlin) 
+        pd.DataFrame: DataFrame mit DatetimeIndex (2025, 15min, Europe/Berlin) 
                       und Spalte 'ertrag_kwh'.
     """
     if pv_kwp <= 0:
         # Falls keine PV-Anlage konfiguriert ist, direkt ein Null-Array zurückgeben
         ziel_index = pd.date_range(
-            start='2025-01-01 00:00', periods=35040, freq='15min', tz=None
+            start='2025-01-01 00:00:00', periods=35040, freq='15min', tz=None
         )
         return pd.DataFrame({'ertrag_kwh': 0.0}, index=ziel_index)
 

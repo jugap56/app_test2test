@@ -25,13 +25,13 @@ def generiere_pv_ertrag(
         cache_dir (str): Verzeichnis zum Speichern/Laden gecachter CSV-Dateien.
 
     Returns:
-        pd.DataFrame: DataFrame mit DatetimeIndex (2025, 15T, Europe/Berlin) 
+        pd.DataFrame: DataFrame mit DatetimeIndex (2025, 15min, Europe/Berlin) 
                       und Spalte 'ertrag_kwh'.
     """
     if pv_kwp <= 0:
         # Falls keine PV-Anlage konfiguriert ist, direkt ein Null-Array zurückgeben
         ziel_index = pd.date_range(
-            start='2025-01-01 00:00:00', periods=35040, freq='15T', tz='Europe/Berlin'
+            start='2025-01-01 00:00:00', periods=35040, freq='15min', tz='Europe/Berlin'
         )
         return pd.DataFrame({'ertrag_kwh': 0.0}, index=ziel_index)
 
@@ -82,7 +82,7 @@ def generiere_pv_ertrag(
     df.index = df.index.round('H')
 
     # 5. Resampling auf 15-Minuten-Raster und Interpolation (in UTC)
-    df_15min = df[['P_kW']].resample('15T').interpolate(method='time')
+    df_15min = df[['P_kW']].resample('15min').interpolate(method='time')
     df_15min['P_kW'] = df_15min['P_kW'].clip(lower=0.0)
 
     # 6. Umrechnung von Leistung (kW) in Energie (kWh)
@@ -103,7 +103,7 @@ def generiere_pv_ertrag(
     ziel_index = pd.date_range(
         start='2025-01-01 00:00:00', 
         periods=35040, 
-        freq='15T', 
+        freq='15min', 
         tz='Europe/Berlin'
     )
     df_export = df_2025_berlin[['ertrag_kwh']].reindex(ziel_index).fillna(0.0)

@@ -41,7 +41,7 @@ def generiere_pv_ertrag(
     if os.path.exists(cache_file):
         try:
             df_cache = pd.read_csv(cache_file, sep=';', decimal=',', index_col=0, parse_dates=True)
-            #print(df_cache)
+            print(df_cache)
             # Zeitzone sicherstellen, falls durch CSV-Export verloren gegangen
             #if df_cache.index.tz is None:
             #    df_cache.index = df_cache.index.tz_localize('Europe/Berlin', ambiguous='infer', nonexistent='shift_forward')

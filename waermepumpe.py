@@ -6,7 +6,7 @@ def berechne_waermepumpe_verbrauch(
     temp_datei: str, 
     t_base: float = 15.0, 
     jahresbedarf: float = 4000.0, 
-    verbose: bool = False
+    verbose: bool = True
 ) -> pd.DataFrame:
     """
     Liest Temperaturdaten ein, interpoliert Lücken und berechnet den 

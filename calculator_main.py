@@ -159,7 +159,7 @@ def calculate_static(
     pv_ertrag = df_pv['ertrag_kwh']
 
     netzbezug = (verbrauch - pv_ertrag).clip(lower=0.0)
-    pv_ins_netz = (pv_ertrag - verbrauch).clip(lower=0.0)
+    #pv_ins_netz = (pv_ertrag - verbrauch).clip(lower=0.0)
 
     if speicher_max > 0 and speicher_leistung > 0:
         max_flow = speicher_leistung * 0.25

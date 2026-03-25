@@ -86,7 +86,7 @@ def generiere_pv_ertrag(
     df.index = df.index.round('h')
 
     # 5. Resampling auf 15-Minuten-Raster und Interpolation (in UTC)
-    df_15min = df[['P_kW']].resample('15T').interpolate(method='time')
+    df_15min = df[['P_kW']].resample('15min').interpolate(method='time')
     df_15min['P_kW'] = df_15min['P_kW'].clip(lower=0.0)
 
     # 6. Umrechnung von Leistung (kW) in Energie (kWh)
@@ -107,8 +107,7 @@ def generiere_pv_ertrag(
     ziel_index = pd.date_range(
         start='2025-01-01 00:00:00', 
         periods=35040, 
-        freq='15T', 
-        tz='Europe/Berlin'
+        freq='15min', 
     )
     df_export = df_2025_berlin[['ertrag_kwh']].reindex(ziel_index).fillna(0.0)
 

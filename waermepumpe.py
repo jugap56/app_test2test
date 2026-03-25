@@ -33,7 +33,8 @@ def berechne_waermepumpe_verbrauch(
     # Einlesen der CSV
     try:
         df_temp = pd.read_csv(temp_datei, sep=";", decimal=",")
-        print(df_temp)
+        if verbose:
+            print(df_temp)
     except Exception as e:
         raise ValueError(f"Fehler beim Einlesen der Datei {temp_datei}: {e}")
 
@@ -41,9 +42,11 @@ def berechne_waermepumpe_verbrauch(
     if 'Datum' in df_temp.columns:
         # Falls die Tabelle breit ist (Tage als Zeilen, Uhrzeiten als Spalten)
         df_temp = df_temp.melt(id_vars=['Datum'], var_name='Uhrzeit', value_name='Temperatur')
-        print(df_temp)
+        if verbose:    
+            print(df_temp)
         df_temp['Uhrzeit'] = df_temp['Uhrzeit'].astype(str).str[:5]
-        print(df_temp)
+        if verbose:        
+            print(df_temp)
         # Echtes Datetime-Parsing für korrekte chronologische Sortierung!
         df_temp['timestamp'] = pd.to_datetime(
             df_temp['Datum'] + ' ' + df_temp['Uhrzeit'], 
@@ -54,7 +57,8 @@ def berechne_waermepumpe_verbrauch(
         )
         df_temp = df_temp.dropna(subset=['timestamp'])
         df_temp = df_temp.sort_values('timestamp').set_index('timestamp')
-        print(df_temp)
+        if verbose:
+            print(df_temp)
     elif 'Temperatur' in df_temp.columns and len(df_temp) == 35040:
         # Falls die Tabelle bereits eine 1D-Zeitreihe ist
         pass

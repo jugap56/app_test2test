@@ -33,6 +33,7 @@ def berechne_waermepumpe_verbrauch(
     # Einlesen der CSV
     try:
         df_temp = pd.read_csv(temp_datei, sep=";", decimal=",")
+        print(df_temp)
     except Exception as e:
         raise ValueError(f"Fehler beim Einlesen der Datei {temp_datei}: {e}")
 

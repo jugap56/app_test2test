@@ -24,7 +24,7 @@ def generiere_lade_profil(
         pd.DataFrame: DataFrame mit DatetimeIndex (2025, 15T) und Spalte 'verbrauch_kwh'.
     """
     # 1. Ziel-Index erstellen
-    idx = pd.date_range("2025-01-01 00:00:00", "2025-12-31 23:45:00", freq="15T")
+    idx = pd.date_range("2025-01-01 00:00:00", "2025-12-31 23:45:00", freq="15min")
 
     if wallbox_leistung_kw <= 0:
         return pd.DataFrame({"verbrauch_kwh": 0.0}, index=idx)

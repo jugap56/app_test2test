@@ -47,7 +47,8 @@ def berechne_waermepumpe_verbrauch(
         # Echtes Datetime-Parsing für korrekte chronologische Sortierung!
         df_temp['timestamp'] = pd.to_datetime(
             df_temp['Datum'] + ' ' + df_temp['Uhrzeit'], 
-            format='%d.%m.%Y %H:%M', 
+            #format='%d.%m.%Y %H:%M', 
+            format = '%Y-%m-%d %H:%M',  # Beispiel: Falls Datum in YYYY-MM-DD
             dayfirst=True, 
             errors='coerce'
         )

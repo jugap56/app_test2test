@@ -148,6 +148,7 @@ def calculate_dynamic(
             summe_energie += 40.0
         else:
             summe_energie += 30.0
+    raise ValueError
 
     return round(summe_energie, 2)
 

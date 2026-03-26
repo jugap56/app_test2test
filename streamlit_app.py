@@ -169,7 +169,7 @@ def main():
             # Lade Spotmarktpreise und bilde den Tagesdurchschnitt
             df_spot = cm.lade_strompreise_als_df("2025_15min_spotmarktpreise_brutto.csv")
             # Gruppiere nach Stunde und rechne in Cent/kWh um
-            avg_hourly = df_spot.groupby(df_spot.index.hour)['Spotmarktpreis_netto (Euro/kWh)'].mean() 
+            avg_hourly = df_spot.groupby(df_spot.index.hour)['Endkundenpreis_brutto (Cent/kWh)'].mean() 
             
             best_hour = avg_hourly.idxmin()
             

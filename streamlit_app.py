@@ -97,7 +97,12 @@ def main():
 
 
     # --- HAUPTBEREICH (Ergebnisse) ---
+  
     if calc_btn:
+        st.session_state["berechnung_aktiv"] = True
+
+    if st.session_state.get("berechnung_aktiv", False):
+        
         with st.spinner("Analysiere Daten und berechne Tarife für 35.040 Intervalle..."):
             # 1. Alle Szenarien simultan berechnen (Dank Vektorisierung geht das in Sekundenbruchteilen!)
             # Statisch
@@ -112,7 +117,6 @@ def main():
             
             # §14a EnWG Modul 3 (Zeitvariable Netzentgelte)
             cost_mod3 = cm.calculate_dynamic(hp, dn, ar_deg, pv, km_woche, km_wochenende, verbrauch_100km, wallbox_power, ev_charge_hour, h0, bat_capacity, bat_power, 3)
-
         # 2. Tooltip / Erklärung der Module
         st.markdown("""
         <style>

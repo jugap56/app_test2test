@@ -93,26 +93,42 @@ def calculate_dynamic(
     if speicher_max > 0 and speicher_leistung > 0:
         max_flow = speicher_leistung * 0.25  # Max Energie in 15 Min (kWh)
 
-        charge_pot = pv_ins_netz.clip(upper=max_flow)
-        discharge_pot = (netz_haushalt + netz_steuvb).clip(upper=max_flow)
+        charge_pot = pv_ins_netz.clip(upper=(max_flow*0.9))                           # Wirkungsgrad 0.9
+        discharge_pot = (netz_haushalt + netz_steuvb).clip(upper=(max_flow/0.9))      # Wirkungsgrad 0.9
 
         # Netto-Batteriestromfluss. GroupBy sorgt für täglichen Reset (näherungsweise realistisch für EFH)
         net_flow = charge_pot - discharge_pot
-        soc = net_flow.groupby(net_flow.index.date).cumsum().clip(lower=0.0, upper=speicher_max)
+        
+        soc = net_flow.groupby(net_flow.index.date).cumsum().clip(lower=0.0, upper=speicher_max)  # ggf optimieren mit entladegrenze bei 10% `lower=(speicher_max*0.1)`
 
         actual_flow = soc - soc.shift(1).fillna(0.0)
 
-        batt_charge = actual_flow.clip(lower=0.0)
+        batt_charge = actual_flow.clip(lower=0.0)           # optimieren 
         batt_discharge = (-actual_flow).clip(lower=0.0)
 
         pv_ins_netz = pv_ins_netz - batt_charge
 
         # Entladung proportional auf Haushalt und SteuVB aufteilen
-        summe_netz = (netz_haushalt + netz_steuvb).replace(0, 1) # Div by 0 verhindern
-        ratio_h = netz_haushalt / summe_netz
+        #summe_netz = (netz_haushalt + netz_steuvb).replace(0, 1) # Div by 0 verhindern
+        #ratio_h = netz_haushalt / summe_netz
 
-        netz_haushalt = (netz_haushalt - (batt_discharge * ratio_h)).clip(lower=0.0)
-        netz_steuvb = (netz_steuvb - (batt_discharge * (1.0 - ratio_h))).clip(lower=0.0)
+        #netz_haushalt = (netz_haushalt - (batt_discharge * ratio_h)).clip(lower=0.0)
+        #netz_steuvb = (netz_steuvb - (batt_discharge * (1.0 - ratio_h))).clip(lower=0.0)
+
+        # 1. Berechnen, wie viel Batterie in den Haushalt geht.
+        # Das ist maximal der gesamte Haushaltsbedarf, aber begrenzt (geclippt) 
+        # auf die tatsächlich verfügbare Batterieentladung.
+        batt_to_haushalt = netz_haushalt.clip(upper=batt_discharge)
+
+        # 2. Berechnen, wie viel Batterie danach noch übrig ist.
+        remaining_batt_discharge = batt_discharge - batt_to_haushalt
+
+        # 3. Neue Netzbezüge berechnen.
+        # Der Haushalt wird um den zugewiesenen Batterieanteil reduziert.
+        netz_haushalt = netz_haushalt - batt_to_haushalt
+
+        # Die SteuVb wird um die restliche Batterie reduziert (darf nicht unter 0 fallen).
+        netz_steuvb = (netz_steuvb - remaining_batt_discharge).clip(lower=0.0)
 
     # 5. § 14a EnWG Modul-Preiskalkulation
     # Grundpreis Haushalt (immer Modul 1 als Basis)

@@ -176,7 +176,11 @@ def calculate_dynamic(
     stromsteuer = 2.05
     summe_dyn_fix = basisverbrauch + arbeitspreis + konzession + kwkumlage + netznutzung + offshore + stromsteuer
     summe_enwg_2 = basisverbrauch + arbeitspreis*0.4 + konzession + kwkumlage + netznutzung + offshore + stromsteuer
-
+    # Abgaben ohne Netznutzung separieren, um die Netznutzung für Modul 3 variabel zu machen
+    abgaben_ohne_netz = basisverbrauch + arbeitspreis + konzession + kwkumlage + offshore + stromsteuer
+    summe_dyn_fix = abgaben_ohne_netz + netznutzung
+    summe_enwg_2 = basisverbrauch + arbeitspreis*0.4 + konzession + kwkumlage + netznutzung + offshore + stromsteuer
+    
     # Grundpreis Haushalt (immer Modul 1 als Basis)
     preis_h = (spot + summe_dyn_fix).clip(lower=0.0)
 

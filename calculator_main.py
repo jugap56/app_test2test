@@ -52,6 +52,7 @@ def calculate_dynamic(
     Reihenfolge: Haushalt decken -> PV-Überschuss für SteuVB nutzen -> Batterie laden/entladen.
     """
     # 1. Profile generieren (alle geben DataFrames mit 2025-DatetimeIndex zurück)
+    # aufruf der Funktionen mit benötigten Parametern aus Modulen und speichern in DataFrames
     df_h = ha.generiere_haushaltslast(jahresverbrauch=ha_verbrauch)
     df_pv = pv.generiere_pv_ertrag(pv_kwp, pv_neigung, pv_ausrichtung)
     df_wp = wp.berechne_waermepumpe_verbrauch(temp_datei="2025_15min_temperaturverlauf.csv", jahresbedarf=wp_bedarf)

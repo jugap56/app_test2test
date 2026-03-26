@@ -23,7 +23,9 @@ def lade_strompreise_als_df(csv_dateiname: str) -> pd.DataFrame:
 
     try:
         df = pd.read_csv(csv_dateiname, sep=';', decimal=',')
-        preis_reihe = pd.to_numeric(df['Endkundenpreis_brutto (Cent/kWh)'], errors='coerce').fillna(32.4)
+        #preis_reihe = pd.to_numeric(df['Endkundenpreis_brutto (Cent/kWh)'], errors='coerce').fillna(32.4)
+        preis_reihe = pd.to_numeric(df['Endkundenpreis_brutto (Cent/kWh)'], errors='coerce').fillna(0.)
+
 
         # Umrechnung von Cent in Euro
         df_preise = pd.DataFrame({'preis_eur': preis_reihe.values / 100.0})

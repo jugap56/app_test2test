@@ -138,6 +138,8 @@ def main():
 
         import textwrap # (Falls noch nicht ganz oben im Skript importiert)
 
+       import textwrap
+
         for col, (name, cost) in zip(cols, costs_dict.items()):
             
             # Wandelt 1,394.33 in 1.394,33 um
@@ -148,11 +150,21 @@ def main():
                     # Highlight für den günstigsten Tarif
                     html_gewinner = textwrap.dedent(f"""
                         <div style="background-color: #e6f4ea; border: 2px solid #28a745; border-radius: 10px; padding: 20px 10px; height: 210px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; box-sizing: border-box;">
-                            <h4 style="color: #155724; margin: 0; text-align: center; width: 100%; font-size: 1.1rem;">{name}</h4>
-                            <h2 style="color: #28a745; margin: 0; text-align: center; width: 100%; font-size: 1.8rem; white-space: nowrap;">{cost_str} €</h2>
-                            <div style="text-align: center; width: 100%;">
-                                <span style="background-color: #28a745; color: white; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: bold;">🏆 Günstigste Wahl</span>
+                            
+                            <div style="color: #155724; width: 100%; text-align: center; font-size: 1.1rem; font-weight: 600; line-height: 1.3;">
+                                {name}
                             </div>
+                            
+                            <div style="color: #28a745; width: 100%; text-align: center; font-size: 1.8rem; font-weight: 700; white-space: nowrap;">
+                                {cost_str} €
+                            </div>
+                            
+                            <div style="width: 100%; text-align: center;">
+                                <span style="background-color: #28a745; color: white; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: bold; display: inline-block;">
+                                    🏆 Günstigste Wahl
+                                </span>
+                            </div>
+                            
                         </div>
                     """)
                     st.markdown(html_gewinner, unsafe_allow_html=True)
@@ -161,10 +173,16 @@ def main():
                     # Standard-Design für die anderen
                     html_standard = textwrap.dedent(f"""
                         <div style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 10px; padding: 20px 10px; height: 210px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; box-sizing: border-box;">
-                            <h4 style="color: #495057; margin: 0; text-align: center; width: 100%; font-size: 1.1rem;">{name}</h4>
-                            <h2 style="color: #343a40; margin: 0; text-align: center; width: 100%; font-size: 1.8rem; white-space: nowrap;">{cost_str} €</h2>
-                            <div style="height: 24px; width: 100%;"></div>
-                        </div>
+                            
+                            <div style="color: #495057; width: 100%; text-align: center; font-size: 1.1rem; font-weight: 600; line-height: 1.3;">
+                                {name}
+                            </div>
+                            
+                            <div style="color: #343a40; width: 100%; text-align: center; font-size: 1.8rem; font-weight: 700; white-space: nowrap;">
+                                {cost_str} €
+                            </div>
+                            
+                            <div style="width: 100%; height: 24px;"></div> </div>
                     """)
                     st.markdown(html_standard, unsafe_allow_html=True)
         

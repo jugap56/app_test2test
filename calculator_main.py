@@ -67,8 +67,7 @@ def calculate_battery_pandas(df: pd.DataFrame, speicher_max: float, speicher_lei
     
     # 3. Die schnelle C-ähnliche Schleife über die NumPy-Arrays
     for i in range(n):
-        actual_in = 0
-        actual_out = 0
+
         if pv_val[i] > 0:
             # Wie viel kann der Wechselrichter / die Batterie maximal aufnehmen?
             space_left = (speicher_max - current_soc) / eff_in
@@ -87,8 +86,8 @@ def calculate_battery_pandas(df: pd.DataFrame, speicher_max: float, speicher_lei
             
         soc[i] = current_soc
         print("SOC: ", soc[i])
-        print("in: ", actual_in)
-        print("load: ", actual_out)
+        #print("in: ", actual_in)
+        #print("load: ", actual_out)
 
     raise ValueError
     # 4. Ergebnisse als neue Pandas-Spalten in den DataFrame einfügen

@@ -5,7 +5,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import calculator_main as cm
 import textwrap
-
+import PVAnlage as pv
 # --- MAIN STREAMLIT APP ---
 def main():
     st.set_page_config(page_title="Studi Energy Check - Tarif-Check", layout="wide")
@@ -206,7 +206,7 @@ def main():
             st.markdown("### ☀️ Photovoltaik: Durchschnittliche Erzeugung im Tagesverlauf")
             
             # 1. Daten über die externe Funktion abrufen (Achtung: Ggf. cm.generiere_pv_ertrag nutzen, falls es im calculator_main liegt)
-            df_pv = cm.generiere_pv_ertrag(pv_kwp=pv, pv_neigung=dn, pv_ausrichtung=ar_deg)
+            df_pv = pv.generiere_pv_ertrag(pv_kwp=pv, pv_neigung=dn, pv_ausrichtung=ar_deg)
             
             # 2. Aus den 15-Min-Werten stündliche Summen bilden, dann Tagesdurchschnitt errechnen
             # 'h' aggregiert die vier 15-Minuten-Blöcke einer Stunde zu einem summierten kWh-Wert

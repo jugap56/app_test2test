@@ -142,10 +142,10 @@ def main():
                     # Highlight für den günstigsten Tarif
                     st.markdown(
                         f"""
-                        <div style="background-color: #e6f4ea; border: 2px solid #28a745; border-radius: 10px; padding: 20px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; align-items: center; min-height: 180px; height: 100%;">
-                            <h4 style="color: #155724; margin-top: 0; margin-bottom: auto;">{name}</h4>
-                            <h2 style="color: #28a745; margin: 15px 0;">{cost:,.2f} €</h2>
-                            <span style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; font-weight: bold;">🏆 Günstigste Wahl</span>
+                        <div style="background-color: #e6f4ea; border: 2px solid #28a745; border-radius: 10px; padding: 15px; text-align: center; height: 190px; display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+                            <h4 style="color: #155724; margin: 0;">{name}</h4>
+                            <h2 style="color: #28a745; margin: 0;">{cost:,.2f} €</h2>
+                            <div><span style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; font-weight: bold;">🏆 Günstigste Wahl</span></div>
                         </div>
                         """, unsafe_allow_html=True
                     )
@@ -153,9 +153,9 @@ def main():
                     # Standard-Design für die anderen
                     st.markdown(
                         f"""
-                        <div style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 10px; padding: 20px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; align-items: center; min-height: 180px; height: 100%;">
-                            <h4 style="color: #495057; margin-top: 0; margin-bottom: auto;">{name}</h4>
-                            <h2 style="color: #343a40; margin: 15px 0 0 0;">{cost:,.2f} €</h2>
+                        <div style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 10px; padding: 15px; text-align: center; height: 190px; display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+                            <h4 style="color: #495057; margin: 0;">{name}</h4>
+                            <h2 style="color: #343a40; margin: 0;">{cost:,.2f} €</h2>
                             <div style="height: 24px;"></div> </div>
                         """, unsafe_allow_html=True
                     )

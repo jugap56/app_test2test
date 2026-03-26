@@ -15,11 +15,11 @@ def lade_strompreise_als_df(csv_dateiname: str) -> pd.DataFrame:
     """
     idx = pd.date_range("2025-01-01 00:00:00", "2025-12-31 23:45:00", freq="15min")
 
-    if not os.path.exists(csv_dateiname):
-        # Fallback auf Dummy-Preise (z.B. für Erstausführung ohne CSV)
-        print("randomisierte Preise")
-        dummy_preise = np.random.uniform(0.10, 0.40, len(idx))
-        return pd.DataFrame({'preis_eur': dummy_preise}, index=idx)
+    #if not os.path.exists(csv_dateiname):
+    #    # Fallback auf Dummy-Preise (z.B. für Erstausführung ohne CSV)
+    #    print("randomisierte Preise")
+    #    dummy_preise = np.random.uniform(0.10, 0.40, len(idx))
+    #    return pd.DataFrame({'preis_eur': dummy_preise}, index=idx)
 
     try:
         df = pd.read_csv(csv_dateiname, sep=';', decimal=',')

@@ -85,7 +85,7 @@ def calculate_battery_pandas(df: pd.DataFrame, speicher_max: float, speicher_lei
             
         soc[i] = current_soc
         print("SOC: ", soc[i])
-        print("in: ", acutal_in)
+        print("in: ", actual_in)
         print("load: ", actual_out)
 
     raise ValueError

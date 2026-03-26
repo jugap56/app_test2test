@@ -107,6 +107,9 @@ def berechne_waermepumpe_verbrauch(
         print(df_out)
         raise ValueError("Berechnungsfehler: Der resultierende Wärmepumpen-DataFrame enthält NaN-Werte.")
 
+    # 6. duplizierte Index-Einträge entfernen
+    df_out = df_out[~df_out.index.duplicated(keep='first')]
+
     return df_out
 
 

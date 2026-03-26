@@ -76,15 +76,16 @@ def calculate_dynamic(
     spot = df_spot['Spotmarktpreis_netto (Cent/kWh)']
 
     # 2. Fachliche Verrechnung Schritt 1: Haushalt vs. PV
-    netz_haushalt = (h_verbrauch - pv_ertrag).clip(lower=0.0)
-    pv_ueberschuss = (pv_ertrag - h_verbrauch).clip(lower=0.0)
+    netz_haushalt = (h_verbrauch - pv_ertrag).clip(lower=0.0)        # wenn pv haus deckt, dann wert = 0. Sonst fehlender Betrag (abdeckung -> netz/speicher).
+    pv_ueberschuss = (pv_ertrag - h_verbrauch).clip(lower=0.0)        # 
 
     # 8. duplizierte Index-Einträge entfernen -- Optimierungspotential, da redundant, wenn besser initialisiert wird
     steuvb_verbrauch = steuvb_verbrauch[~steuvb_verbrauch.index.duplicated(keep='first')]
     pv_ueberschuss = pv_ueberschuss[~pv_ueberschuss.index.duplicated(keep='first')]
 
     # 3. Fachliche Verrechnung Schritt 2: SteuVB nutzen den PV-Überschuss
-    steuvb_aus_pv = steuvb_verbrauch.clip(upper=pv_ueberschuss)
+      # steuvb_verbrauch wird auf pv_ueberschuss begrenzt
+    steuvb_aus_pv = steuvb_verbrauch.clip(upper=pv_ueberschuss) 
     netz_steuvb = steuvb_verbrauch - steuvb_aus_pv
     pv_ins_netz = pv_ueberschuss - steuvb_aus_pv
 

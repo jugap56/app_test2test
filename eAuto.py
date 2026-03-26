@@ -80,6 +80,9 @@ def generiere_lade_profil(
     # 7. Output formatieren
     df_ea = pd.DataFrame({"verbrauch_kwh": profil_1d}, index=idx)
 
+    # 8. duplizierte Index-Einträge entfernen
+    df_ea = df_ea[~df_ea.index.duplicated(keep='first')]
+
     return df_ea
 
 

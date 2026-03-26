@@ -162,7 +162,7 @@ def calculate_dynamic(
     einspeise_ertrag_eur = pv_ins_netz * EINSPEISEVERGUETUNG_EUR
 
     summe_energie = kosten_energie_eur.sum() - einspeise_ertrag_eur.sum()
-
+    summe_energie = round((summe_energie / 100),2)
     # 7. Fixkosten & Zähler-Infrastruktur berechnen
     gesamt_verbrauch = netz_haushalt.sum() + netz_steuvb.sum()
 

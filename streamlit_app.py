@@ -206,7 +206,7 @@ def main():
             st.markdown("### ☀️ Photovoltaik: Durchschnittliche Erzeugung im Tagesverlauf")
             
             # 1. Daten über die externe Funktion abrufen (Achtung: Ggf. cm.generiere_pv_ertrag nutzen, falls es im calculator_main liegt)
-            df_pv = generiere_pv_ertrag(pv_kwp=pv, pv_neigung=dn, pv_ausrichtung=ar_deg)
+            df_pv = cm.generiere_pv_ertrag(pv_kwp=pv, pv_neigung=dn, pv_ausrichtung=ar_deg)
             
             # 2. Aus den 15-Min-Werten stündliche Summen bilden, dann Tagesdurchschnitt errechnen
             # 'h' aggregiert die vier 15-Minuten-Blöcke einer Stunde zu einem summierten kWh-Wert

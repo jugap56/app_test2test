@@ -136,6 +136,8 @@ def main():
         best_module = min(costs_dict, key=costs_dict.get)
         cols = st.columns(4)
 
+        import textwrap # (Falls noch nicht ganz oben im Skript importiert)
+
         for col, (name, cost) in zip(cols, costs_dict.items()):
             
             # Wandelt 1,394.33 in 1.394,33 um
@@ -145,17 +147,11 @@ def main():
                 if name == best_module:
                     # Highlight für den günstigsten Tarif
                     html_gewinner = textwrap.dedent(f"""
-                        <div style="background-color: #e6f4ea; border: 2px solid #28a745; border-radius: 10px; padding: 15px 5px; height: 210px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; box-sizing: border-box; width: 100%;">
-                            <h4 style="color: #155724; margin: 0; padding: 0; width: 100%; text-align: center; font-size: 1.1rem; line-height: 1.3;">
-                                {name}
-                            </h4>
-                            <h2 style="color: #28a745; margin: 0; padding: 0; width: 100%; text-align: center; font-size: 1.7rem; white-space: nowrap;">
-                                {cost_str} €
-                            </h2>
-                            <div style="width: 100%; text-align: center; margin: 0; padding: 0;">
-                                <span style="background-color: #28a745; color: white; padding: 4px 8px; border-radius: 15px; font-size: 11px; font-weight: bold; display: inline-block;">
-                                    🏆 Günstigste Wahl
-                                </span>
+                        <div style="background-color: #e6f4ea; border: 2px solid #28a745; border-radius: 10px; padding: 20px 10px; height: 210px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; box-sizing: border-box;">
+                            <h4 style="color: #155724; margin: 0; text-align: center; width: 100%; font-size: 1.1rem;">{name}</h4>
+                            <h2 style="color: #28a745; margin: 0; text-align: center; width: 100%; font-size: 1.8rem; white-space: nowrap;">{cost_str} €</h2>
+                            <div style="text-align: center; width: 100%;">
+                                <span style="background-color: #28a745; color: white; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: bold;">🏆 Günstigste Wahl</span>
                             </div>
                         </div>
                     """)
@@ -164,14 +160,10 @@ def main():
                 else:
                     # Standard-Design für die anderen
                     html_standard = textwrap.dedent(f"""
-                        <div style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 10px; padding: 15px 5px; height: 210px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; box-sizing: border-box; width: 100%;">
-                            <h4 style="color: #495057; margin: 0; padding: 0; width: 100%; text-align: center; font-size: 1.1rem; line-height: 1.3;">
-                                {name}
-                            </h4>
-                            <h2 style="color: #343a40; margin: 0; padding: 0; width: 100%; text-align: center; font-size: 1.7rem; white-space: nowrap;">
-                                {cost_str} €
-                            </h2>
-                            <div style="width: 100%; height: 24px;"></div>
+                        <div style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 10px; padding: 20px 10px; height: 210px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; box-sizing: border-box;">
+                            <h4 style="color: #495057; margin: 0; text-align: center; width: 100%; font-size: 1.1rem;">{name}</h4>
+                            <h2 style="color: #343a40; margin: 0; text-align: center; width: 100%; font-size: 1.8rem; white-space: nowrap;">{cost_str} €</h2>
+                            <div style="height: 24px; width: 100%;"></div>
                         </div>
                     """)
                     st.markdown(html_standard, unsafe_allow_html=True)

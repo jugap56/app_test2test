@@ -131,15 +131,26 @@ def calculate_dynamic(
         netz_steuvb = (netz_steuvb - remaining_batt_discharge).clip(lower=0.0)
 
     # 5. § 14a EnWG Modul-Preiskalkulation
+    # Fix-Kosten für Spotpreise
+    basisverbrauch = 2.5
+    arbeitspreis = 9.29
+    konzession = 2.39
+    kwk-umlage = 0.446
+    netznutzung = 1.559
+    offshore = 0.941
+    stromsteuer = 2.05
+    summe_dyn_fix = basisverbrauch + arbeitspreis + konzession + kwk-umlage + netznutzung + offshore + stromsteuer
+    summe_enwg_2 = basisverbrauch + arbeitspreis*0.4 + konzession + kwk-umlage + netznutzung + offshore + stromsteuer
+
     # Grundpreis Haushalt (immer Modul 1 als Basis)
-    preis_h = (spot + 0.005).clip(lower=0.0)
+    preis_h = (spot + summe_dyn_fix).clip(lower=0.0)
 
     if enwg == 1:
         # Modul 1: Rabatt erfolgt gesamtjährig pauschal (wird in Streamlit-UI abgezogen)
         preis_steuvb = preis_h 
     elif enwg == 2:
         # Modul 2: 60% Netzentgelt-Rabatt. Spotpreis kann negativ wirken!
-        preis_steuvb = spot + 0.010
+        preis_steuvb = spot + summe_enwg_2
     elif enwg == 3:
         # Modul 3: Zeitvariabel (Nachtstrom-Simulation). 90% Spot, mind. 0 ct.
         preis_steuvb = (spot * 0.9).clip(lower=0.0)
@@ -172,8 +183,7 @@ def calculate_dynamic(
             summe_energie += 40.0
         else:
             summe_energie += 30.0
-    raise ValueError
-
+            
     return round(summe_energie, 2)
 
 

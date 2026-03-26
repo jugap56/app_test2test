@@ -169,16 +169,6 @@ def calculate_static(
     verbrauch = df_h['verbrauch_kwh'] + df_wp['verbrauch_kwh'] + df_ea['verbrauch_kwh']
     pv_ertrag = df_pv['ertrag_kwh']
 
-    #print(type(verbrauch))
-    #print(type(pv_ertrag))
-    # Beide Indizes auf tz-naive umstellen, da Zeitformat nicht übereinstimmt und somti subtraktion nicht möglich ist
-    #verbrauch.index = verbrauch.index.tz_localize(None)
-    #pv_ertrag.index = pv_ertrag.index.tz_localize(None)
-    # Frequenz-Tag wiederherstellen, da dieser durch .index.tz_localize(None) verloren geht
-    #verbrauch = verbrauch.asfreq('15min')
-    #pv_ertrag = pv_ertrag.asfreq('15min')
-    print(verbrauch.index)
-    print(pv_ertrag.index)
     netzbezug = (verbrauch - pv_ertrag).clip(lower=0.0)
     pv_ins_netz = (pv_ertrag - verbrauch).clip(lower=0.0)
 

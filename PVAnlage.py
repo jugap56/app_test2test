@@ -25,13 +25,13 @@ def generiere_pv_ertrag(
         cache_dir (str): Verzeichnis zum Speichern/Laden gecachter CSV-Dateien.
 
     Returns:
-        pd.DataFrame: DataFrame mit DatetimeIndex (2025, 15min, Europe/Berlin) 
+        pd.DataFrame: DataFrame mit DatetimeIndex (2025, 15min) 
                       und Spalte 'ertrag_kwh'.
     """
     if pv_kwp <= 0:
         # Falls keine PV-Anlage konfiguriert ist, direkt ein Null-Array zurückgeben
         ziel_index = pd.date_range(
-            start='2025-01-01 00:00:00', periods=35040, freq='15min', tz='Europe/Berlin'
+            start='2025-01-01 00:00:00', periods=35040, freq='15min', tz=None
         )
         return pd.DataFrame({'ertrag_kwh': 0.0}, index=ziel_index)
 
@@ -95,7 +95,9 @@ def generiere_pv_ertrag(
     df_15min.index = df_15min.index + pd.Timedelta(days=2192)
 
     # 8. Konvertierung in die deutsche Zeitzone (berücksichtigt automatisch Sommerzeit für 2025)
-    df_2025_berlin = df_15min.tz_convert('Europe/Berlin')
+    #df_2025_berlin = df_15min.tz_convert('Europe/Berlin')
+    df_2025_berlin = df_15min.copy()
+    df_2025_berlin.index = df_2025_berlin.index.tz_localize(None)
 
     # 9. Zwingen in das exakte 2025-Raster (Genau 35.040 Zeilen)
     # Eventuelle Lücken an den Rändern (z.B. Neujahr 00:00 Uhr, weil der erste Wert UTC verschoben wurde)
@@ -104,9 +106,10 @@ def generiere_pv_ertrag(
         start='2025-01-01 00:00:00', 
         periods=35040, 
         freq='15min', 
-        tz='Europe/Berlin'
+        tz='None'
     )
     df_export = df_2025_berlin[['ertrag_kwh']].reindex(ziel_index).fillna(0.0)
+    df_export.index = df_export.index.tz_localize(None)
 
     # 10. In Cache speichern
     df_export.to_csv(cache_file, sep=';', decimal=',')

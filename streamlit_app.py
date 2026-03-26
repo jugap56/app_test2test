@@ -184,7 +184,7 @@ def main():
                 text=[f"{v:.1f} ct" for v in avg_hourly.values],
                 textposition='auto'
             ))
-            
+            max_y = avg_hourly.max() + 2
             fig.update_layout(
                 title="Durchschnittlicher Spotmarkt-Strompreis im Tagesverlauf",
                 xaxis_title="Uhrzeit",

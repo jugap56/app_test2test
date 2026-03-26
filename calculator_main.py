@@ -154,8 +154,8 @@ def calculate_dynamic(
     elif enwg == 3:
         # Modul 3: Zeitvariabel (Nachtstrom-Simulation). 90% Spot, mind. 0 ct.
         preis_steuvb = (spot * 0.9).clip(lower=0.0)
-    else:
-        preis_steuvb = preis_h
+    #else:
+    #    preis_steuvb = preis_h
 
     # 6. Kosten ermitteln
     kosten_energie_eur = (netz_haushalt * preis_h) + (netz_steuvb * preis_steuvb)

@@ -35,6 +35,7 @@ def lade_strompreise_als_df(csv_dateiname: str) -> pd.DataFrame:
             df_preise = df_preise.reindex(range(35040)).ffill().fillna(0.324)
 
         df_preise.index = idx
+        print("Preise erfolgreich eingelesen")
         return df_preise
     except Exception as e:
         print(f"Fehler beim Laden der Preise: {e}")

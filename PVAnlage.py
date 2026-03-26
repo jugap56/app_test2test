@@ -106,7 +106,7 @@ def generiere_pv_ertrag(
         start='2025-01-01 00:00:00', 
         periods=35040, 
         freq='15min', 
-        tz='Europe/Berlin'
+        tz=None
     )
     df_export = df_2025_berlin[['ertrag_kwh']].reindex(ziel_index).fillna(0.0)
     df_export.index = df_export.index.tz_localize(None)

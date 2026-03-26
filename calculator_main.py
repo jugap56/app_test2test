@@ -61,7 +61,7 @@ def calculate_dynamic(
     print(df_pv)
     print(df_wp)
     print(df_ea)
-    print(df_sport)
+    print(df_spot)
 
     h_verbrauch = df_h['verbrauch_kwh']
     pv_ertrag = df_pv['ertrag_kwh']

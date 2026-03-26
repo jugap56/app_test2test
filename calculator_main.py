@@ -85,11 +85,11 @@ def calculate_battery_pandas(df: pd.DataFrame, speicher_max: float, speicher_lei
             current_soc -= actual_out / eff_out
             
         soc[i] = current_soc
-        print("SOC: ", soc[i])
+      #  print("SOC: ", soc[i])
         #print("in: ", actual_in)
         #print("load: ", actual_out)
 
-    raise ValueError
+   # raise ValueError
     # 4. Ergebnisse als neue Pandas-Spalten in den DataFrame einfügen
     df_result = df.copy()
     df_result['soc'] = soc

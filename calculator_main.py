@@ -187,8 +187,26 @@ def calculate_dynamic(
         # Modul 2: 60% Netzentgelt-Rabatt. Spotpreis kann negativ wirken!
         preis_steuvb = spot + summe_enwg_2
     elif enwg == 3:
-        # Modul 3: Zeitvariabel (Nachtstrom-Simulation). 90% Spot, mind. 0 ct.
-        preis_steuvb = (spot * 0.9).clip(lower=0.0)
+        # Modul 3: Zeitvariabel
+        stunde = spot.index.hour
+        quartal = spot.index.quarter
+        
+        # Quartals-Logik: Zeitvariable Netzentgelte gelten nur in Q1 und Q4
+        is_active_quarter = np.isin(quartal, [1, 4])
+        
+        # Zeitfenster: NT (00:00 bis 05:00 Uhr) und HT (17:00 bis 19:00 Uhr)
+        is_nt = is_active_quarter & (stunde >= 0) & (stunde < 5)
+        is_ht = is_active_quarter & (stunde >= 17) & (stunde < 19)
+        
+        # Bedingungen und zugehörige Netzentgelte (NT: 20%, HT: 200%)
+        conditions =[is_nt, is_ht]
+        choices =[netznutzung * 0.2, netznutzung * 2.0]
+        
+        # In inaktiven Quartalen und der restlichen Zeit gilt ST (100% -> default)
+        netznutzung_modul3 = np.select(conditions, choices, default=netznutzung)
+        
+        # Preisberechnung SteuVB für Modul 3 (Abgaben + zeitvariables Netzentgelt + Spot)
+        preis_steuvb = (spot + abgaben_ohne_netz + netznutzung_modul3).clip(lower=0.0)
     #else:
     #    preis_steuvb = preis_h
 

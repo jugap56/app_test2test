@@ -148,17 +148,16 @@ def main():
             
             with col:
                 if name == best_module:
-                    # Highlight für den günstigsten Tarif (KOMPLETTER EINZEILER)
-                    html_gewinner = f'<div style="background-color: #e6f4ea; border: 2px solid #28a745; border-radius: 10px; padding: 20px 10px; height: 210px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; box-sizing: border-box;"><div style="color: #155724; width: 100%; text-align: center; font-size: 1.1rem; font-weight: 600; line-height: 1.3;">{name}</div><div style="color: #28a745; width: 100%; text-align: center; font-size: 1.8rem; font-weight: 700; white-space: nowrap;">{cost_str} €</div><div style="width: 100%; text-align: center;"><span style="background-color: #28a745; color: white; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: bold; display: inline-block;">🏆 Günstigste Wahl</span></div></div>'
+                    # Highlight: Badge sitzt absolut positioniert auf der unteren Linie
+                    html_gewinner = f'<div style="position: relative; background-color: #e6f4ea; border: 2px solid #28a745; border-radius: 10px; padding: 20px 10px; height: 210px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box; margin-bottom: 20px;"><div style="color: #155724; width: 100%; text-align: center; font-size: 1.1rem; font-weight: 600; line-height: 1.3; margin-bottom: 20px;">{name}</div><div style="color: #28a745; width: 100%; text-align: center; font-size: 1.8rem; font-weight: 700; white-space: nowrap;">{cost_str} €</div><div style="position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 50%); background-color: #5cb85c; color: white; padding: 6px 18px; border-radius: 20px; font-size: 13px; font-weight: bold; white-space: nowrap; box-shadow: 0px 4px 6px rgba(0,0,0,0.15);">🏆 Günstigste Wahl</div></div>'
                     
                     st.markdown(html_gewinner, unsafe_allow_html=True)
                     
                 else:
-                    # Standard-Design für die anderen (KOMPLETTER EINZEILER)
-                    html_standard = f'<div style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 10px; padding: 20px 10px; height: 210px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; box-sizing: border-box;"><div style="color: #495057; width: 100%; text-align: center; font-size: 1.1rem; font-weight: 600; line-height: 1.3;">{name}</div><div style="color: #343a40; width: 100%; text-align: center; font-size: 1.8rem; font-weight: 700; white-space: nowrap;">{cost_str} €</div><div style="width: 100%; height: 24px;"></div></div>'
+                    # Standard-Design (ebenfalls mit margin-bottom, damit alle Boxen auf gleicher Höhe bleiben)
+                    html_standard = f'<div style="position: relative; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 10px; padding: 20px 10px; height: 210px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box; margin-bottom: 20px;"><div style="color: #495057; width: 100%; text-align: center; font-size: 1.1rem; font-weight: 600; line-height: 1.3; margin-bottom: 20px;">{name}</div><div style="color: #343a40; width: 100%; text-align: center; font-size: 1.8rem; font-weight: 700; white-space: nowrap;">{cost_str} €</div></div>'
                     
                     st.markdown(html_standard, unsafe_allow_html=True)
-        
         st.divider()
 
         # 4. Smart-Charging Graph (nur wenn E-Auto vorhanden)

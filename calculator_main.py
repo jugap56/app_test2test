@@ -6,7 +6,7 @@ import waermepumpe as wp
 import eAuto as ea
 import haushalt as ha
 
-#EINSPEISEVERGUETUNG_EUR = 0.0778  # 7,78 ct/kWh in Euro
+EINSPEISEVERGUETUNG_EUR = 0.0778  # 7,78 ct/kWh in Euro
 EINSPEISEVERGUETUNG_CT = 7.78  # 7,78 ct/kWh in Euro
 
 
@@ -161,10 +161,10 @@ def calculate_dynamic(
     kosten_energie_ct = (netz_haushalt * preis_h) + (netz_steuvb * preis_steuvb)
     einspeise_ertrag_ct = pv_ins_netz * EINSPEISEVERGUETUNG_CT
 
-    summe_energie = kosten_energie_ct.sum() - einspeise_ertrag_ct.sum()
+    summe_energie = kosten_energie_ct.sum()*1.19 - einspeise_ertrag_ct.sum()
 
     #Umrechnung in Euro und MwSt.
-    summe_energie = round((summe_energie*1.19 / 100),2)
+    summe_energie = round((summe_energie / 100),2)
     
     # 7. Fixkosten & Zähler-Infrastruktur berechnen
     gesamt_verbrauch = netz_haushalt.sum() + netz_steuvb.sum()

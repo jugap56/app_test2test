@@ -25,6 +25,9 @@ def lade_strompreise_als_df(csv_dateiname: str) -> pd.DataFrame:
         df = pd.read_csv(csv_dateiname, sep=';', decimal=',')
         #preis_reihe = pd.to_numeric(df['Endkundenpreis_brutto (Cent/kWh)'], errors='coerce').fillna(32.4)
         #preis_reihe = pd.to_numeric(df['Endkundenpreis_brutto (Cent/kWh)'], errors='coerce').fillna(0.)
+        if df_out.isnull().values.any():
+            print(df_out)
+            raise ValueError("Berechnungsfehler: Der resultierende Wärmepumpen-DataFrame enthält NaN-Werte.")
 
 
         # Umrechnung von Cent in Euro

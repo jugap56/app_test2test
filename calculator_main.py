@@ -64,11 +64,11 @@ def calculate_dynamic(
     df_wp = wp.berechne_waermepumpe_verbrauch(temp_datei="2025_15min_temperaturverlauf.csv", jahresbedarf=wp_bedarf)
     df_ea = ea.generiere_lade_profil(ea_wochentag, ea_wochenende, ea_verbrauch, ea_leistung, ea_beginn)
     df_spot = lade_strompreise_als_df("2025_15min_spotmarktpreise_netto.csv")
-    print("Haushalt:",df_h)
-    print("PV:",df_pv)
-    print("WP:",df_wp)
-    print("ea:",df_ea)
-    print("spot: ",df_spot)
+    #print("Haushalt:",df_h)
+    #print("PV:",df_pv)
+    #print("WP:",df_wp)
+    #print("ea:",df_ea)
+    #print("spot: ",df_spot)
 
     h_verbrauch = df_h['verbrauch_kwh']
     pv_ertrag = df_pv['ertrag_kwh']

@@ -103,7 +103,7 @@ def calculate_dynamic(
         print("SOC:", soc)
         actual_flow = soc - soc.shift(1).fillna(0.0)
         print("acutal flow:", actual_flow)
-        input()
+        raise ValueError
         batt_charge = actual_flow.clip(lower=0.0)           # optimieren 
         batt_discharge = (-actual_flow).clip(lower=0.0)
 

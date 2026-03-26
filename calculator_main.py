@@ -73,7 +73,7 @@ def calculate_dynamic(
     h_verbrauch = df_h['verbrauch_kwh']
     pv_ertrag = df_pv['ertrag_kwh']
     steuvb_verbrauch = df_wp['verbrauch_kwh'] + df_ea['verbrauch_kwh']
-    spot = df_spot['preis_eur']
+    spot = df_spot['Spotmarktpreis_netto (Cent/kWh)']
 
     # 2. Fachliche Verrechnung Schritt 1: Haushalt vs. PV
     netz_haushalt = (h_verbrauch - pv_ertrag).clip(lower=0.0)

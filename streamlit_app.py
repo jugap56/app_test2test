@@ -167,7 +167,7 @@ def main():
             st.markdown("### 🚗 Smart-Charging: Der optimale Ladezeitpunkt")
             
             # Lade Spotmarktpreise und bilde den Tagesdurchschnitt
-            df_spot = cm.lade_strompreise_als_df("2025_15min_spotmarktpreis.csv")
+            df_spot = cm.lade_strompreise_als_df("2025_15min_spotmarktpreise_netto.csv")
             # Gruppiere nach Stunde und rechne in Cent/kWh um
             avg_hourly = df_spot.groupby(df_spot.index.hour)['preis_eur'].mean() * 100 
             

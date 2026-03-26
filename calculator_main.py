@@ -65,6 +65,9 @@ def calculate_dynamic(
     netz_haushalt = (h_verbrauch - pv_ertrag).clip(lower=0.0)
     pv_ueberschuss = (pv_ertrag - h_verbrauch).clip(lower=0.0)
 
+    # 8. duplizierte Index-Einträge entfernen
+    steuvb_verbrauch = steuvb_verbrauch[~steuvb_verbrauch.index.duplicated(keep='first')]
+    
     # 3. Fachliche Verrechnung Schritt 2: SteuVB nutzen den PV-Überschuss
     steuvb_aus_pv = steuvb_verbrauch.clip(upper=pv_ueberschuss)
     netz_steuvb = steuvb_verbrauch - steuvb_aus_pv

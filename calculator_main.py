@@ -62,9 +62,6 @@ def calculate_dynamic(
     spot = df_spot['preis_eur']
 
     # 2. Fachliche Verrechnung Schritt 1: Haushalt vs. PV
-    print("Debug print für calc_main")
-    print(h_verbrauch.index)
-    print(pv_ertrag.index)
     netz_haushalt = (h_verbrauch - pv_ertrag).clip(lower=0.0)
     pv_ueberschuss = (pv_ertrag - h_verbrauch).clip(lower=0.0)
 

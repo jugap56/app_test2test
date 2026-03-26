@@ -133,7 +133,7 @@ def calculate_dynamic(
       # steuvb_verbrauch wird auf pv_ueberschuss begrenzt
     steuvb_aus_pv = steuvb_verbrauch.clip(upper=pv_ueberschuss) 
     netz_steuvb = steuvb_verbrauch - steuvb_aus_pv
-    pv_ins_netz = pv_ueberschuss - steuvb_aus_pv
+    pv_ins_netz_vor_batt = pv_ueberschuss - steuvb_aus_pv
 
 # 4. Batterie-Simulation im Pandas-Style
     if speicher_max > 0 and speicher_leistung > 0:
@@ -237,23 +237,21 @@ def calculate_static(
     pv_ertrag = df_pv['ertrag_kwh']
 
     netzbezug = (verbrauch - pv_ertrag).clip(lower=0.0)
-    pv_ins_netz = (pv_ertrag - verbrauch).clip(lower=0.0)
+    pv_ins_netz_vor_batt = (pv_ertrag - verbrauch).clip(lower=0.0)
 
+    # --- NEUE BATTERIELOGIK HIER EINFÜGEN ---
     if speicher_max > 0 and speicher_leistung > 0:
-        max_flow = speicher_leistung * 0.25
-        charge_pot = pv_ins_netz.clip(upper=max_flow)
-        discharge_pot = netzbezug.clip(upper=max_flow)
-
-        net_flow = charge_pot - discharge_pot
-        soc = net_flow.groupby(net_flow.index.date).cumsum().clip(lower=0.0, upper=speicher_max)
-
-        actual_flow = soc - soc.shift(1).fillna(0.0)
-
-        batt_charge = actual_flow.clip(lower=0.0)
-        batt_discharge = (-actual_flow).clip(lower=0.0)
-
-        pv_ins_netz = pv_ins_netz - batt_charge
-        netzbezug = netzbezug - batt_discharge
+        df_batt_input = pd.DataFrame({
+            'pv_ueberschuss': pv_ins_netz_vor_batt,
+            'last_bedarf': netzbezug
+        })
+        
+        df_batt = calculate_battery_pandas(df_batt_input, speicher_max, speicher_leistung)
+        
+        pv_ins_netz = pv_ins_netz_vor_batt - df_batt['batt_charge']
+        netzbezug = netzbezug - df_batt['batt_discharge']
+    else:
+        pv_ins_netz = pv_ins_netz_vor_batt
 
     # Statischer Preisansatz: 32.4 ct/kWh
     statischer_preis_eur = 0.324

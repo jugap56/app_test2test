@@ -5,6 +5,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import calculator_main as cm
 import textwrap
+
 # --- MAIN STREAMLIT APP ---
 def main():
     st.set_page_config(page_title="Studi Energy Check - Tarif-Check", layout="wide")

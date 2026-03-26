@@ -100,9 +100,9 @@ def calculate_dynamic(
         net_flow = charge_pot - discharge_pot
         
         soc = net_flow.groupby(net_flow.index.date).cumsum().clip(lower=0.0, upper=speicher_max)  # ggf optimieren mit entladegrenze bei 10% `lower=(speicher_max*0.1)`
-        print("SOC:", soc.iloc[500:550])
+        print("SOC:", soc.iloc[600:650])
         actual_flow = soc - soc.shift(1).fillna(0.0)
-        print("acutal flow:", actual_flow.iloc[500:550])
+        print("acutal flow:", actual_flow.iloc[600:650])
         raise ValueError
         batt_charge = actual_flow.clip(lower=0.0)           # optimieren 
         batt_discharge = (-actual_flow).clip(lower=0.0)

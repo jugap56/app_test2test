@@ -127,7 +127,7 @@ def main():
 
         # 3. 4-Spalten Ansicht & Gewinner-Ermittlung
         costs_dict = {
-            "Fixer Tarif (Basis)": cost_static,
+            "Statischer Strompreis (Basis)": cost_static,
             "§14a Modul 1 (Pauschale)": cost_mod1,
             "§14a Modul 2 (Prozentual)": cost_mod2,
             "§14a Modul 3 (Zeitvariabel)": cost_mod3

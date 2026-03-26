@@ -148,43 +148,15 @@ def main():
             
             with col:
                 if name == best_module:
-                    # Highlight für den günstigsten Tarif
-                    html_gewinner = textwrap.dedent(f"""
-                        <div style="background-color: #e6f4ea; border: 2px solid #28a745; border-radius: 10px; padding: 20px 10px; height: 210px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; box-sizing: border-box;">
-                            
-                            <div style="color: #155724; width: 100%; text-align: center; font-size: 1.1rem; font-weight: 600; line-height: 1.3;">
-                                {name}
-                            </div>
-                            
-                            <div style="color: #28a745; width: 100%; text-align: center; font-size: 1.8rem; font-weight: 700; white-space: nowrap;">
-                                {cost_str} €
-                            </div>
-                            
-                            <div style="width: 100%; text-align: center;">
-                                <span style="background-color: #28a745; color: white; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: bold; display: inline-block;">
-                                    🏆 Günstigste Wahl
-                                </span>
-                            </div>
-                            
-                        </div>
-                    """)
+                    # Highlight für den günstigsten Tarif (KOMPLETTER EINZEILER)
+                    html_gewinner = f'<div style="background-color: #e6f4ea; border: 2px solid #28a745; border-radius: 10px; padding: 20px 10px; height: 210px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; box-sizing: border-box;"><div style="color: #155724; width: 100%; text-align: center; font-size: 1.1rem; font-weight: 600; line-height: 1.3;">{name}</div><div style="color: #28a745; width: 100%; text-align: center; font-size: 1.8rem; font-weight: 700; white-space: nowrap;">{cost_str} €</div><div style="width: 100%; text-align: center;"><span style="background-color: #28a745; color: white; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: bold; display: inline-block;">🏆 Günstigste Wahl</span></div></div>'
+                    
                     st.markdown(html_gewinner, unsafe_allow_html=True)
                     
                 else:
-                    # Standard-Design für die anderen
-                    html_standard = textwrap.dedent(f"""
-                        <div style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 10px; padding: 20px 10px; height: 210px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; box-sizing: border-box;">
-                            
-                            <div style="color: #495057; width: 100%; text-align: center; font-size: 1.1rem; font-weight: 600; line-height: 1.3;">
-                                {name}
-                            </div>
-                            
-                            <div style="color: #343a40; width: 100%; text-align: center; font-size: 1.8rem; font-weight: 700; white-space: nowrap;">
-                                {cost_str} €
-                            </div>
-                            
-                            <div style="width: 100%; height: 24px;"></div> </div>
-                    """)
+                    # Standard-Design für die anderen (KOMPLETTER EINZEILER)
+                    html_standard = f'<div style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 10px; padding: 20px 10px; height: 210px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; box-sizing: border-box;"><div style="color: #495057; width: 100%; text-align: center; font-size: 1.1rem; font-weight: 600; line-height: 1.3;">{name}</div><div style="color: #343a40; width: 100%; text-align: center; font-size: 1.8rem; font-weight: 700; white-space: nowrap;">{cost_str} €</div><div style="width: 100%; height: 24px;"></div></div>'
+                    
                     st.markdown(html_standard, unsafe_allow_html=True)
         
         st.divider()

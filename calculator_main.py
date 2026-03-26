@@ -65,7 +65,7 @@ def calculate_dynamic(
     netz_haushalt = (h_verbrauch - pv_ertrag).clip(lower=0.0)
     pv_ueberschuss = (pv_ertrag - h_verbrauch).clip(lower=0.0)
 
-    # 8. duplizierte Index-Einträge entfernen
+    # 8. duplizierte Index-Einträge entfernen -- Optimierungspotential, da redundant, wenn besser initialisiert wird
     steuvb_verbrauch = steuvb_verbrauch[~steuvb_verbrauch.index.duplicated(keep='first')]
     pv_ueberschuss = pv_ueberschuss[~pv_ueberschuss.index.duplicated(keep='first')]
     

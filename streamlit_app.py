@@ -188,6 +188,7 @@ def main():
             fig.update_layout(
                 title="Durchschnittlicher Spotmarkt-Strompreis im Tagesverlauf",
                 xaxis_title="Uhrzeit",
+                yaxis_range=[20, max_y],
                 yaxis_title="Strompreis (rein Energie) [ct/kWh]",
                 template="plotly_white",
                 showlegend=False,

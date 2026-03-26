@@ -17,6 +17,7 @@ def lade_strompreise_als_df(csv_dateiname: str) -> pd.DataFrame:
 
     if not os.path.exists(csv_dateiname):
         # Fallback auf Dummy-Preise (z.B. für Erstausführung ohne CSV)
+        print("randomisierte Preise")
         dummy_preise = np.random.uniform(0.10, 0.40, len(idx))
         return pd.DataFrame({'preis_eur': dummy_preise}, index=idx)
 

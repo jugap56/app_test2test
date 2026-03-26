@@ -42,8 +42,8 @@ def generiere_pv_ertrag(
         try:
             df_cache = pd.read_csv(cache_file, sep=';', decimal=',', index_col=0, parse_dates=True)
             # Zeitzone sicherstellen, falls durch CSV-Export verloren gegangen
-            if df_cache.index.tz is None:
-                df_cache.index = df_cache.index.tz_localize('Europe/Berlin', ambiguous='infer', nonexistent='shift_forward')
+            #if df_cache.index.tz is None:
+             #   df_cache.index = df_cache.index.tz_localize('Europe/Berlin', ambiguous='infer', nonexistent='shift_forward')
             return df_cache[['ertrag_kwh']]
         except Exception as e:
             print(f"Cache konnte nicht gelesen werden, lade Daten neu: {e}")

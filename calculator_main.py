@@ -6,7 +6,9 @@ import waermepumpe as wp
 import eAuto as ea
 import haushalt as ha
 
-EINSPEISEVERGUETUNG_EUR = 0.0778  # 7,78 ct/kWh in Euro
+#EINSPEISEVERGUETUNG_EUR = 0.0778  # 7,78 ct/kWh in Euro
+EINSPEISEVERGUETUNG_EUR = 7.78  # 7,78 ct/kWh in Euro
+
 
 def lade_strompreise_als_df(csv_dateiname: str) -> pd.DataFrame:
     """
@@ -22,22 +24,21 @@ def lade_strompreise_als_df(csv_dateiname: str) -> pd.DataFrame:
     #    return pd.DataFrame({'preis_eur': dummy_preise}, index=idx)
 
     try:
-        df = pd.read_csv(csv_dateiname, sep=';', decimal=',')
+        df_preise = pd.read_csv(csv_dateiname, sep=';', decimal=',')
         #preis_reihe = pd.to_numeric(df['Endkundenpreis_brutto (Cent/kWh)'], errors='coerce').fillna(32.4)
         #preis_reihe = pd.to_numeric(df['Endkundenpreis_brutto (Cent/kWh)'], errors='coerce').fillna(0.)
-        if df.isnull().values.any():
-            print(df)
+        if df_preise.isnull().values.any():
+            print(df_preise)
             raise ValueError("Berechnungsfehler: Der resultierende Wärmepumpen-DataFrame enthält NaN-Werte.")
 
-        df_preise = df
         # Umrechnung von Cent in Euro
         #df_preise = pd.DataFrame({'preis_eur': preis_reihe.values / 100.0})
 
         # Länge anpassen, falls CSV abweicht
-        if len(df_preise) > 35040:
-            df_preise = df_preise.iloc[:35040]
-        elif len(df_preise) < 35040:
-            df_preise = df_preise.reindex(range(35040)).ffill().fillna(0.324)
+        #if len(df_preise) > 35040:
+        #    df_preise = df_preise.iloc[:35040]
+        #elif len(df_preise) < 35040:
+        #    df_preise = df_preise.reindex(range(35040)).ffill().fillna(0.324)
 
         df_preise.index = idx
         print("Preise erfolgreich eingelesen")

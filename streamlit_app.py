@@ -141,40 +141,36 @@ def main():
                 if name == best_module:
                     # Highlight für den günstigsten Tarif
                     st.markdown(
-                        f"""
-                        <div style="background-color: #e6f4ea; border: 2px solid #28a745; border-radius: 10px; padding: 15px 5px; height: 100%; min-height: 200px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; box-sizing: border-box;">
-                            
-                            <div style="min-height: 55px; width: 100%; display: flex; align-items: center; justify-content: center; text-align: center;">
-                                <h4 style="color: #155724; margin: 0; font-size: clamp(0.9rem, 1.2vw, 1.1rem); line-height: 1.3; word-wrap: break-word;">{name}</h4>
-                            </div>
-                            
-                            <div style="width: 100%; text-align: center; margin: 10px 0;">
-                                <h2 style="color: #28a745; margin: 0; font-size: clamp(1.2rem, 1.8vw, 1.8rem); white-space: nowrap;">{cost:,.2f} €</h2>
-                            </div>
-                            
-                            <div style="width: 100%; min-height: 24px; text-align: center;">
-                                <span style="background-color: #28a745; color: white; padding: 4px 8px; border-radius: 15px; font-size: 11px; font-weight: bold; white-space: nowrap;">🏆 Günstigste Wahl</span>
-                            </div>
-                            
-                        </div>
-                        """, unsafe_allow_html=True
+f"""
+<div style="background-color: #e6f4ea; border: 2px solid #28a745; border-radius: 10px; padding: 15px 5px; height: 100%; min-height: 200px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; box-sizing: border-box;">
+    <div style="min-height: 55px; width: 100%; display: flex; align-items: center; justify-content: center; text-align: center;">
+        <h4 style="color: #155724; margin: 0; font-size: clamp(0.9rem, 1.2vw, 1.1rem); line-height: 1.3; word-wrap: break-word;">{name}</h4>
+    </div>
+    <div style="width: 100%; text-align: center; margin: 10px 0;">
+        <h2 style="color: #28a745; margin: 0; font-size: clamp(1.2rem, 1.8vw, 1.8rem); white-space: nowrap;">{cost:,.2f} €</h2>
+    </div>
+    <div style="width: 100%; min-height: 24px; text-align: center;">
+        <span style="background-color: #28a745; color: white; padding: 4px 8px; border-radius: 15px; font-size: 11px; font-weight: bold; white-space: nowrap;">🏆 Günstigste Wahl</span>
+    </div>
+</div>
+""", 
+                        unsafe_allow_html=True
                     )
                 else:
                     # Standard-Design für die anderen
                     st.markdown(
-                        f"""
-                        <div style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 10px; padding: 15px 5px; height: 100%; min-height: 200px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; box-sizing: border-box;">
-                            
-                            <div style="min-height: 55px; width: 100%; display: flex; align-items: center; justify-content: center; text-align: center;">
-                                <h4 style="color: #495057; margin: 0; font-size: clamp(0.9rem, 1.2vw, 1.1rem); line-height: 1.3; word-wrap: break-word;">{name}</h4>
-                            </div>
-                            
-                            <div style="width: 100%; text-align: center; margin: 10px 0;">
-                                <h2 style="color: #343a40; margin: 0; font-size: clamp(1.2rem, 1.8vw, 1.8rem); white-space: nowrap;">{cost:,.2f} €</h2>
-                            </div>
-                            
-                            <div style="width: 100%; min-height: 24px;"></div> </div>
-                        """, unsafe_allow_html=True
+f"""
+<div style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 10px; padding: 15px 5px; height: 100%; min-height: 200px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; box-sizing: border-box;">
+    <div style="min-height: 55px; width: 100%; display: flex; align-items: center; justify-content: center; text-align: center;">
+        <h4 style="color: #495057; margin: 0; font-size: clamp(0.9rem, 1.2vw, 1.1rem); line-height: 1.3; word-wrap: break-word;">{name}</h4>
+    </div>
+    <div style="width: 100%; text-align: center; margin: 10px 0;">
+        <h2 style="color: #343a40; margin: 0; font-size: clamp(1.2rem, 1.8vw, 1.8rem); white-space: nowrap;">{cost:,.2f} €</h2>
+    </div>
+    <div style="width: 100%; min-height: 24px;"></div>
+</div>
+""", 
+                        unsafe_allow_html=True
                     )
         
         st.divider()

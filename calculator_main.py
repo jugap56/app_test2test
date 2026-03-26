@@ -67,6 +67,7 @@ def calculate_dynamic(
 
     # 8. duplizierte Index-Einträge entfernen
     steuvb_verbrauch = steuvb_verbrauch[~steuvb_verbrauch.index.duplicated(keep='first')]
+    pv_ueberschuss = pv_ueberschuss[~pv_ueberschuss.index.duplicated(keep='first')]
     
     # 3. Fachliche Verrechnung Schritt 2: SteuVB nutzen den PV-Überschuss
     steuvb_aus_pv = steuvb_verbrauch.clip(upper=pv_ueberschuss)

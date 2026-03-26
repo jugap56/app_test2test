@@ -137,9 +137,9 @@ def main():
         best_module = min(costs_dict, key=costs_dict.get)
         cols = st.columns(4)
 
-        import textwrap # (Falls noch nicht ganz oben im Skript importiert)
+     # (Falls noch nicht ganz oben im Skript importiert)
 
-       import textwrap
+       
 
         for col, (name, cost) in zip(cols, costs_dict.items()):
             

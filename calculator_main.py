@@ -18,6 +18,7 @@ def lade_strompreise_als_df(csv_dateiname: str) -> pd.DataFrame:
     if not os.path.exists(csv_dateiname):
         # Fallback auf Dummy-Preise (z.B. für Erstausführung ohne CSV)
         dummy_preise = np.random.uniform(0.10, 0.40, len(idx))
+        print("Simulation mit randomisierten Preisen.")
         return pd.DataFrame({'preis_eur': dummy_preise}, index=idx)
 
     try:
@@ -74,30 +75,39 @@ def calculate_dynamic(
     netz_steuvb = steuvb_verbrauch - steuvb_aus_pv
     pv_ins_netz = pv_ueberschuss - steuvb_aus_pv
 
-    # 4. Batterie-Simulation (Vektorisiert via grouped cumsum)
-    if speicher_max > 0 and speicher_leistung > 0:
-        max_flow = speicher_leistung * 0.25  # Max Energie in 15 Min (kWh)
-        
-        charge_pot = pv_ins_netz.clip(upper=max_flow)
-        discharge_pot = (netz_haushalt + netz_steuvb).clip(upper=max_flow)
-        
-        # Netto-Batteriestromfluss. GroupBy sorgt für täglichen Reset (näherungsweise realistisch für EFH)
-        net_flow = charge_pot - discharge_pot
-        soc = net_flow.groupby(net_flow.index.date).cumsum().clip(lower=0.0, upper=speicher_max)
-        
-        actual_flow = soc - soc.shift(1).fillna(0.0)
-        
-        batt_charge = actual_flow.clip(lower=0.0)
-        batt_discharge = (-actual_flow).clip(lower=0.0)
+    # 4.5. Speicherlogik basierend auf Spotmarktpreis
+    durchschnittspreis = spot.mean()  # Durchschnittspreis berechnen
 
-        pv_ins_netz = pv_ins_netz - batt_charge
+    # Nur wenn der Spotpreis über dem Durchschnittspreis liegt, Speicher entladen
+    if durchschnittspreis <= 0.324:  # Statischer Preis als Grenze
+        # Speicher nicht entladen, sondern Strom direkt aus dem Netz beziehen
+        # (Keine Änderung an netz_haushalt und netz_steuvb)
+        pass  # Speicher bleibt inaktiv
+    else:     # Speicherlogik nur aktivieren, wenn Spotpreis über Durchschnittspreis liegt
+        # 4. Batterie-Simulation (Vektorisiert via grouped cumsum)
+        if speicher_max > 0 and speicher_leistung > 0:
+            max_flow = speicher_leistung * 0.25  # Max Energie in 15 Min (kWh)
         
-        # Entladung proportional auf Haushalt und SteuVB aufteilen
-        summe_netz = (netz_haushalt + netz_steuvb).replace(0, 1) # Div by 0 verhindern
-        ratio_h = netz_haushalt / summe_netz
+            charge_pot = pv_ins_netz.clip(upper=max_flow)
+            discharge_pot = (netz_haushalt + netz_steuvb).clip(upper=max_flow)
         
-        netz_haushalt = (netz_haushalt - (batt_discharge * ratio_h)).clip(lower=0.0)
-        netz_steuvb = (netz_steuvb - (batt_discharge * (1.0 - ratio_h))).clip(lower=0.0)
+            # Netto-Batteriestromfluss. GroupBy sorgt für täglichen Reset (näherungsweise realistisch für EFH)
+            net_flow = charge_pot - discharge_pot
+            soc = net_flow.groupby(net_flow.index.date).cumsum().clip(lower=0.0, upper=speicher_max)
+        
+            actual_flow = soc - soc.shift(1).fillna(0.0)
+        
+            batt_charge = actual_flow.clip(lower=0.0)
+            batt_discharge = (-actual_flow).clip(lower=0.0)
+
+            pv_ins_netz = pv_ins_netz - batt_charge
+        
+            # Entladung proportional auf Haushalt und SteuVB aufteilen
+            summe_netz = (netz_haushalt + netz_steuvb).replace(0, 1) # Div by 0 verhindern
+            ratio_h = netz_haushalt / summe_netz
+        
+            netz_haushalt = (netz_haushalt - (batt_discharge * ratio_h)).clip(lower=0.0)
+            netz_steuvb = (netz_steuvb - (batt_discharge * (1.0 - ratio_h))).clip(lower=0.0)
 
     # 5. § 14a EnWG Modul-Preiskalkulation
     # Grundpreis Haushalt (immer Modul 1 als Basis)

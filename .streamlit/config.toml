@@ -1,0 +1,11 @@
+[theme]
+# Die Hauptfarbe für aktive Radio-Buttons, Slider und Ladebalken (hier passend zu deinem Grün)
+primaryColor = "#d50037"
+
+# --- Optionale Einstellungen für den Dark-Mode ---
+# Wenn du die Rauten (#) am Anfang der folgenden Zeilen entfernst, 
+# kannst du auch diese Farben erzwingen:
+
+# backgroundColor = "#0e1117"        # Hintergrundfarbe der Hauptseite
+# secondaryBackgroundColor = "#262730" # Hintergrundfarbe der linken Sidebar
+# textColor = "#fafafa"              # Allgemeine Textfarbe

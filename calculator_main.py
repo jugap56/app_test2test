@@ -47,6 +47,52 @@ def lade_strompreise_als_df(csv_dateiname: str) -> pd.DataFrame:
         print(f"Fehler beim Laden der Preise: {e}")
         return pd.DataFrame({'preis_eur': 0.324}, index=idx)
 
+def calculate_battery_pandas(df: pd.DataFrame, speicher_max: float, speicher_leistung: float, eff_in=0.9, eff_out=1.0) -> pd.DataFrame:
+    """
+    Erwartet einen DataFrame mit den Spalten 'pv_ueberschuss' und 'last_bedarf'.
+    Gibt den DataFrame zurück, angereichert mit 'soc', 'batt_charge' und 'batt_discharge'.
+    """
+    # 1. Rohe NumPy-Arrays aus Pandas extrahieren (für maximale Geschwindigkeit)
+    pv_val = df['pv_ueberschuss'].values
+    load_val = df['last_bedarf'].values
+    
+    # 2. Pre-Allocation der Ergebnis-Arrays
+    n = len(df)
+    soc = np.zeros(n, dtype=np.float32)
+    charge = np.zeros(n, dtype=np.float32)
+    discharge = np.zeros(n, dtype=np.float32)
+    
+    max_flow = speicher_leistung * 0.25  # Max kWh pro 15 Min
+    current_soc = 0.0
+    
+    # 3. Die schnelle C-ähnliche Schleife über die NumPy-Arrays
+    for i in range(n):
+        if pv_val[i] > 0:
+            # Wie viel kann der Wechselrichter / die Batterie maximal aufnehmen?
+            space_left = (speicher_max - current_soc) / eff_in
+            actual_in = min(pv_val[i], max_flow, space_left)
+            
+            charge[i] = actual_in
+            current_soc += actual_in * eff_in
+            
+        elif load_val[i] > 0:
+            # Wie viel kann die Batterie abgeben?
+            energy_avail = current_soc * eff_out
+            actual_out = min(load_val[i], max_flow, energy_avail)
+            
+            discharge[i] = actual_out
+            current_soc -= actual_out / eff_out
+            
+        soc[i] = current_soc
+        
+    # 4. Ergebnisse als neue Pandas-Spalten in den DataFrame einfügen
+    df_result = df.copy()
+    df_result['soc'] = soc
+    df_result['batt_charge'] = charge
+    df_result['batt_discharge'] = discharge
+    
+    return df_result
+
 
 def calculate_dynamic(
     wp_bedarf: float, pv_neigung: float, pv_ausrichtung: float, pv_kwp: float, 
@@ -89,47 +135,30 @@ def calculate_dynamic(
     netz_steuvb = steuvb_verbrauch - steuvb_aus_pv
     pv_ins_netz = pv_ueberschuss - steuvb_aus_pv
 
-    # 4. Batterie-Simulation (Vektorisiert via grouped cumsum)
+# 4. Batterie-Simulation im Pandas-Style
     if speicher_max > 0 and speicher_leistung > 0:
-        max_flow = speicher_leistung * 0.25  # Max Energie in 15 Min (kWh)
-
-        charge_pot = pv_ins_netz.clip(upper=(max_flow*0.9))                           # Wirkungsgrad 0.9
-        discharge_pot = (netz_haushalt + netz_steuvb).clip(upper=(max_flow/0.9))      # Wirkungsgrad 0.9
-
-        # Netto-Batteriestromfluss. GroupBy sorgt für täglichen Reset (näherungsweise realistisch für EFH)
-        net_flow = charge_pot - discharge_pot
         
-        soc = net_flow.groupby(net_flow.index.date).cumsum().clip(lower=0.0, upper=speicher_max)  # ggf optimieren mit entladegrenze bei 10% `lower=(speicher_max*0.1)`
-        print("SOC:", soc.iloc[17600:17650])
-        actual_flow = soc - soc.shift(1).fillna(0.0)
-        print("acutal flow:", actual_flow.iloc[17600:17650])
-        raise ValueError
-        batt_charge = actual_flow.clip(lower=0.0)           # optimieren 
-        batt_discharge = (-actual_flow).clip(lower=0.0)
-
-        pv_ins_netz = pv_ins_netz - batt_charge
-
-        # Entladung proportional auf Haushalt und SteuVB aufteilen
-        #summe_netz = (netz_haushalt + netz_steuvb).replace(0, 1) # Div by 0 verhindern
-        #ratio_h = netz_haushalt / summe_netz
-
-        #netz_haushalt = (netz_haushalt - (batt_discharge * ratio_h)).clip(lower=0.0)
-        #netz_steuvb = (netz_steuvb - (batt_discharge * (1.0 - ratio_h))).clip(lower=0.0)
-
-        # 1. Berechnen, wie viel Batterie in den Haushalt geht.
-        # Das ist maximal der gesamte Haushaltsbedarf, aber begrenzt (geclippt) 
-        # auf die tatsächlich verfügbare Batterieentladung.
+        # Temporären DataFrame für die Speicher-Inputs bauen
+        df_batt_input = pd.DataFrame({
+            'pv_ueberschuss': pv_ins_netz_vor_batt,
+            'last_bedarf': netz_haushalt + netz_steuvb
+        })
+        
+        # Aufruf der optimierten Pandas/NumPy-Funktion
+        df_batt = calculate_battery_pandas(df_batt_input, speicher_max, speicher_leistung)
+        
+        # Jetzt arbeiten wir ganz normal mit Pandas-Series weiter!
+        pv_ins_netz = pv_ins_netz_vor_batt - df_batt['batt_charge']
+        batt_discharge = df_batt['batt_discharge']
+        
+        # Verteilung des entladenen Stroms auf Haushalt und SteuVB
         batt_to_haushalt = netz_haushalt.clip(upper=batt_discharge)
-
-        # 2. Berechnen, wie viel Batterie danach noch übrig ist.
         remaining_batt_discharge = batt_discharge - batt_to_haushalt
 
-        # 3. Neue Netzbezüge berechnen.
-        # Der Haushalt wird um den zugewiesenen Batterieanteil reduziert.
         netz_haushalt = netz_haushalt - batt_to_haushalt
-
-        # Die SteuVb wird um die restliche Batterie reduziert (darf nicht unter 0 fallen).
         netz_steuvb = (netz_steuvb - remaining_batt_discharge).clip(lower=0.0)
+    else:
+        pv_ins_netz = pv_ins_netz_vor_batt
 
     # 5. § 14a EnWG Modul-Preiskalkulation
     # Fix-Kosten für Spotpreise

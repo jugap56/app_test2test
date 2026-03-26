@@ -29,7 +29,7 @@ def lade_strompreise_als_df(csv_dateiname: str) -> pd.DataFrame:
             print(df)
             raise ValueError("Berechnungsfehler: Der resultierende Wärmepumpen-DataFrame enthält NaN-Werte.")
 
-
+        df_preise = df
         # Umrechnung von Cent in Euro
         #df_preise = pd.DataFrame({'preis_eur': preis_reihe.values / 100.0})
 

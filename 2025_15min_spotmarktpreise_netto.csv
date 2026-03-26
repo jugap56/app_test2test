@@ -1,4 +1,4 @@
-Datum;Uhrzeit;Endkundenpreis_brutto (Cent/kWh)
+Datum;Uhrzeit;Spotmarktpreis_netto (Cent/kWh)
 01.01.2025;00:00;2,2399999999999998
 01.01.2025;00:15;-0,74
 01.01.2025;00:30;-1,016

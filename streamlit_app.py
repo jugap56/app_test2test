@@ -198,7 +198,53 @@ def main():
             st.plotly_chart(fig, use_container_width=True)
             
             st.success(f"💡 **Empfehlung:** Historisch gesehen ist Strom um **{best_hour:02d}:00 Uhr** am günstigsten. Wenn Sie den Ladebeginn Ihrer Wallbox auf diese Uhrzeit programmieren, maximieren Sie Ihren finanziellen Vorteil in dynamischen Tarifen.")
-
+        # ---------------------------------------------------------
+        # 5. PV-Anlage Graph (unabhängig vom E-Auto)
+        # ---------------------------------------------------------
+        if hat_pv == "Ja":
+            st.divider()
+            st.markdown("### ☀️ Photovoltaik: Durchschnittliche Erzeugung im Tagesverlauf")
+            
+            # 1. Daten über die externe Funktion abrufen (Achtung: Ggf. cm.generiere_pv_ertrag nutzen, falls es im calculator_main liegt)
+            df_pv = generiere_pv_ertrag(pv_kwp=pv, pv_neigung=dn, pv_ausrichtung=ar_deg)
+            
+            # 2. Aus den 15-Min-Werten stündliche Summen bilden, dann Tagesdurchschnitt errechnen
+            # 'h' aggregiert die vier 15-Minuten-Blöcke einer Stunde zu einem summierten kWh-Wert
+            df_pv_hourly = df_pv.resample('h').sum()
+            avg_hourly_pv = df_pv_hourly.groupby(df_pv_hourly.index.hour)['ertrag_kwh'].mean()
+            
+            best_hour_pv = avg_hourly_pv.idxmax()
+            max_y_pv = avg_hourly_pv.max() * 1.1 # 10% optischer Puffer nach oben
+            
+            # 3. Interaktiver Plotly-Graph im exakt gleichen Design
+            fig_pv = go.Figure()
+            
+            # Farben: Beste Stunde in Grün, Rest in Blau
+            colors_pv = ['#28a745' if i == best_hour_pv else '#1f77b4' for i in range(24)]
+            
+            # Texte: Verstecke den Text nachts (wenn der Wert fast 0 ist), für eine aufgeräumte Optik
+            texts_pv = [f"{v:.2f} kWh" if v > 0.05 else "" for v in avg_hourly_pv.values]
+            
+            fig_pv.add_trace(go.Bar(
+                x=[f"{i:02d}:00" for i in range(24)],
+                y=avg_hourly_pv.values,
+                marker_color=colors_pv,
+                text=texts_pv,
+                textposition='auto'
+            ))
+            
+            fig_pv.update_layout(
+                xaxis_title="Uhrzeit",
+                yaxis_range=[0, max_y_pv],
+                yaxis_title="Ertrag [kWh]",
+                template="plotly_white",
+                showlegend=False,
+                margin=dict(t=30, b=0, l=0, r=0)
+            )
+            
+            st.plotly_chart(fig_pv, use_container_width=True)
+            
+            st.info(f"💡 **Tipp:** Ihre Solaranlage erreicht im Jahresdurchschnitt um **{best_hour_pv:02d}:00 Uhr** ihre Spitzenleistung. Planen Sie energieintensive Aufgaben (z. B. Waschmaschine) idealerweise in diesem Zeitraum ein.")
     else:
         # Startbildschirm (wenn noch nichts geklickt wurde)
         st.info("👈 Bitte konfigurieren Sie Ihren Haushalt auf der linken Seite und klicken Sie anschließend auf 'Berechnung starten'.")
